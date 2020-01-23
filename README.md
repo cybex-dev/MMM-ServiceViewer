@@ -1,8 +1,8 @@
-# MQTT Publisher
+# Magic Mirror Service Viewer
 
 Module for [MagicMirror](https://github.com/MichMich/MagicMirror/) allows showing which services are online on your local network.
 
-This module allows finding services you are interested in on your network, and can open then with the mmm-xdg-open module or some other mechanism.
+This module allows finding services you are interested in on your network, and can open then with the [MMM-XDG-OPEN](https://github.com/cybex-dev/MMM-XDG-OPEN) module or some other mechanism.
 
 *Note: 
 Best used with [MMM-XDG-OPEN](https://github.com/cybex-dev/MMM-XDG-OPEN) to allow opening of any link from a service on your network* 
@@ -20,7 +20,7 @@ Show is the header (defined in the config), and below a list of hosts on the loc
 Open up your terminal, navigate to `/path/to/MagicMirror/modules`. Then type in:
 
     git clone https://github.com/cybex-dev/MMM-ServiceViewer
-    cd MMM-MQTT-Publisher
+    cd MMM-ServiceViewer
     npm install
 
 ## Configuration
@@ -29,14 +29,13 @@ Here is an example configuration with description. Put it in the `MagicMirror/co
 
     {
         module: "MMM-ServiceViewer",
-            header: "Network Services",
-            position: "bottom_right",
-            config: {
-                // groupBy: "service",
-                serviceTypes: [
-                    "ssh", "device-info", "smb", "videodepth", "microphone", "openhab-server", "video-rgb", "video-depth", "speaker"
-                ]
-            }
+        header: "Network Services",
+        position: "bottom_right",
+        config: {
+            // groupBy: "service",
+            serviceTypes: [
+                "ssh", "device-info", "smb", "videodepth", "microphone", "openhab-server", "video-rgb", "video-depth", "speaker"
+            ]
         }
     }
 
@@ -66,9 +65,9 @@ The payload descriptions/purpose is as follows
 
 | Option             | Description
 | ------------------ | -----------
-| `protocol`         | Location on MagicMirror display
-| `location`         | An array of services you are interested in.
-| `port`             | An array of services you are interested in.
+| `protocol`         | The protocol `TCP`, `UDP`, etc of the service.
+| `location`         | The IP address where the service can be found.
+| `port`             | The port where the service can be accessed from.
 | `type`             | Type as defined in Avahi Service Types the first part of the service type e.g. the `_ssh` part of the full service name `_ssh._tcp`. The type name in this case will be `ssh` (without the underscore).  
 
 *See the [Avahi Documentation](https://linux.die.net/man/5/avahi.service) and the [Arch Wiki](https://wiki.archlinux.org/index.php/Avahi) for information about Avahi operations and naming conventions, and the [IANA register](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml) for service names and their corresponding ports.* 

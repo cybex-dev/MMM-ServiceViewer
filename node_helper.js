@@ -1,11 +1,6 @@
-// Install `sudo apt install libavahi-compat-libdnssd-dev`
-
 var self = this;
 var NodeHelper = require("node_helper");
 
-// let servicePacketFactory = require('multicast-dns-service-types');
-// let avahi = require('multicast-dns')();
-// let mdns = require('mdns')();
 var bonjour = require('bonjour')();
 var config = {
     serviceTypes:[],
@@ -57,36 +52,6 @@ module.exports = NodeHelper.create({
     // Subclass start method.
     start: function() {
         self = this;
-        // console.log("Starting module: " + this.name);
-        // avahi.on('response', function(response) {
-        //     console.log('got a response packet:', response)
-        // });
-        //
-        // avahi.on('query', function(query) {
-        //     console.log('got a query packet:', query)
-        // });
-        //
-        // avahi.query({
-        //     questions:[{
-        //         name: 'INTELNUC-UBUNTU.local',
-        //         type: 'A'
-        //     }]
-        // })
-
-
-        // advertise a http server on port 4321
-        // const ad = mdns.createAdvertisement(mdns.tcp('http'), 4321);
-        // ad.start();
-        //
-        // // watch all http servers
-        // const browser = mdns.createBrowser(mdns.tcp('http'));
-        // browser.on('serviceUp', service => {
-        //     console.log("service up: ", service);
-        // });
-        // browser.on('serviceDown', service => {
-        //     console.log("service down: ", service);
-        // });
-        // browser.start();
     },
 
     // Subclass socketNotificationReceived received.
