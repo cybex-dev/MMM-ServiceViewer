@@ -1,31 +1,25 @@
 # MQTT Publisher
 
-Module for [MagicMirror](https://github.com/MichMich/MagicMirror/) publishing notifications from [MM notification mechanism](https://github.com/michMich/MagicMirror/wiki/notifications) to any MQTT Broker(s).
+Module for [MagicMirror](https://github.com/MichMich/MagicMirror/) allows showing which services are online on your local network.
 
-This module allows publishing to a MQTT broker e.g. an IoT framework such as [OpenHAB](https://www.openhab.org/), [DSLinks](http://iot-dsa.org/), etc, or some other MQTT broker.
+This module allows finding services you are interested in on your network, and can open then with the mmm-xdg-open module or some other mechanism.
 
 *Note: 
-Best used with [MMM-MQTT](https://github.com/ottopaulsen/MMM-MQTT) to allow subscribing to an MQTT broker and retrieving information from an MQTT Broker* 
-
-This project was forked and adapted from [@ottopaulsen](https://github.com/ottopaulsen)'s [MMM-MQTT](https://github.com/ottopaulsen/MMM-MQTT)
+Best used with [MMM-XDG-OPEN](https://github.com/cybex-dev/MMM-XDG-OPEN) to allow opening of any link from a service on your network* 
 
 **Any issues, please report and pull requests are most welcome**
 
 ## Screenshot
 
-Shows that it is active and running. This will most likely include last send notifications with a timeout feature in future
+Show is the header (defined in the config), and below a list of hosts on the local network providing a service, grouped by the type of service.
 
-![Screenshot](doc/MQTT-Publisher.png)
-
-## What is MQTT
-MQTT is a lightweight messaging protocol implementing the [Publish–subscribe pattern](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern), used in mainly in smart (or M2M) environments to allow devices and sensors and basically anything to communicate with anything else, requiring a MQTT broker (i.i. a [mosquitto server](https://mosquitto.org/)) [see for more info](http://mqtt.org/)
-
+![Screenshot](docs/MMM-ServiceViewer.png)
 
 ## Installation
 
 Open up your terminal, navigate to `/path/to/MagicMirror/modules`. Then type in:
 
-    git clone https://github.com/cybex-dev/MMM-MQTT-Publisher
+    git clone https://github.com/cybex-dev/MMM-ServiceViewer
     cd MMM-MQTT-Publisher
     npm install
 
@@ -34,28 +28,19 @@ Open up your terminal, navigate to `/path/to/MagicMirror/modules`. Then type in:
 Here is an example configuration with description. Put it in the `MagicMirror/config/config.js` file:
 
     {
-        module: 'MMM-MQTT-Publisher',
-        position: 'bottom_left',
-        header: 'MQTT Publisher',
-        config: {
-            mqttServers: [
-                {
-                    address: 'localhost',       // Server address or IP address
-                    port: '1883',               // Port number if other than default
-                    user: '',                   // Leave out for no user
-                    password: '',               // Leave out for no password
-                    publications: [             // multiple topic, notification tuples are allowed
-                        {
-                            topic: 'calender/event',                // Topic to look for
-                            notification: 'CALENDER_EVENTS'         // Broadcast data received by `CLOCK_TICK` notification.
-                        },
-                    ]
-                },
-            ],
+        module: "MMM-ServiceViewer",
+            header: "Network Services",
+            position: "bottom_right",
+            config: {
+                // groupBy: "service",
+                serviceTypes: [
+                    "ssh", "device-info", "smb", "videodepth", "microphone", "openhab-server", "video-rgb", "video-depth", "speaker"
+                ]
+            }
         }
     }
 
-`mqttServers` is an array, so you can add multiple servers to the same config. You can also use the module multiple places on the mirror/screen.
+`serviceTypes` is an array, so you can add the various services you are interested in (which is found on your local network).
 
 ## Configuration options
 
@@ -64,65 +49,35 @@ The following properties can be configured:
 | Option             | Description
 | ------------------ | -----------
 | `position`         | Location on MagicMirror display
-| `mqttServers`      | An array of servers.
+| `serviceTypes`      | An array of services you are interested in.
 
-## MQTT Server Configuration options
+### OnClick functionality
 
-The following properties can be configured for an MQTT Server:
+When an host (entry) is clicked, a notification is sent using the [Magic Mirror Notification Mechanism](https://github.com/michMich/MagicMirror/wiki/notifications). The notification `XDG-OPEN` is sent along with details in the notification payload. The payload is defined as
 
-| Option             | Description
-| ------------------ | -----------
-| `address`          | Address (IPv4 or hostname). <br> **Default value:** `localhost`
-| `port`             | The port which the MQTT listens on. <br> **Default value:** `1883`
-| `user`             | Username credential of the MQTT broker requires it. <br> *This can be left blank if no username is required*
-| `password`         | Password credential of the MQTT broker requires it. <br> *This can be left blank if no password is required*
-| `publications`     | An array of notifications which the MQTT broker will be accepting from the MM-MQTT module.
+    {
+        protocol: "",
+        location: "",
+        port: "",
+        type: "",
+    } 
 
-### Publishing
-
-MM-MQTT module also allows publishing of data to topics. For a specific MQTT Server, an array of notifications and corresponding topics is defined. 
-
-When a notification is received via [MM notification mechanism](https://github.com/michMich/MagicMirror/wiki/notifications), it is received by the MQTT-Module. This notification is checked against each MQTT Server's `publication` notifications and the data is published to the topic if needed. 
-
-This is detailed below:  
+The payload descriptions/purpose is as follows
 
 | Option             | Description
 | ------------------ | -----------
-| `topic`            | The topic to publish to. e.g. `clock` or `home/door/sensor/open`
-| `notification`     | The notification to publish on if present. `CALENDER_EVENTS`
+| `protocol`         | Location on MagicMirror display
+| `location`         | An array of services you are interested in.
+| `port`             | An array of services you are interested in.
+| `type`             | Type as defined in Avahi Service Types the first part of the service type e.g. the `_ssh` part of the full service name `_ssh._tcp`. The type name in this case will be `ssh` (without the underscore).  
 
-### How To Publish
-Publishing data to the MQTT server is done by sending a notification from your module by calling from within your module (not in the `node_helper` module)
-
-`this.sendNotification(notification, payload)`
-
-where:
-
-| Parameter         | Description
-| ------------------| -----------
-| `notification`    | your desired notification name. This can be `CALENDER_EVENTS` or `CLOCK_TICK`
-| `payload`         | the data you wish to send to the MQTT broker.
-
-### JSON Data
-
-If the payload contains JSON data, use the `jsonpointer` configuration to get the value. See [JSON Ponter specification](https://tools.ietf.org/html/rfc6901) or google an easier description.
-
-When dealing with a topic named e.g. `/mirror/clock/tick`, you will need to parse the `topic` and its value into a JSON object.
-
-#### Example
-
-You want to publish data to the topic `/mirror/clock/tick` with value `21`
-
-The resulting JSON Object format is: 
-```{"mirror": {"clock": {"tick": 21}}}```
-
-*p.s. don't forget about adding quotes to each string value to match JSON compatibility*
-
+*See the [Avahi Documentation](https://linux.die.net/man/5/avahi.service) and the [Arch Wiki](https://wiki.archlinux.org/index.php/Avahi) for information about Avahi operations and naming conventions, and the [IANA register](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml) for service names and their corresponding ports.* 
 
 ## Collaborate
 
 Pull requests are welcome.
 
-## TO DO
+## Future Work
 
-Create more descriptive GUI possibly adding a list of notifications with the most recently published first. 
+- Improve GUI for viewing online/offline services with icons of services and status icons.
+- Add browsing all services on the network, not just predefined services.
