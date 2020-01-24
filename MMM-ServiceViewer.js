@@ -1,3 +1,7 @@
+const isHttp = (service) => {
+    return (service.txt) ? service.txt.uri.startsWith("/") : false;
+};
+
 const usesMulticast = (service) => {
     return (service.txt) ? service.txt.uses_multicast === "1" : false;
 };
@@ -147,6 +151,11 @@ Module.register("MMM-ServiceViewer",{
                 row.addEventListener('click', () => {
                     const service = entry;
 
+                    var proto = service.protocol;
+                    if(isHttp(entry)) {
+                        proto = "http"
+                    }
+
                     var ipv4s = service.addresses.filter(validIPv4);
                     if (ipv4s.length === 0) {
                         console.log("No valid IPv4 address can be found, this may be a problem");
@@ -158,7 +167,7 @@ Module.register("MMM-ServiceViewer",{
                     }
 
                     self.sendNotification("XDG-OPEN", {
-                        protocol: service.protocol,
+                        protocol: proto,
                         location: ip,
                         port: service.port,
                         type: service.type,
