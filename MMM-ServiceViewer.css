@@ -9,7 +9,15 @@ td {
     line-height: 2em;
 }
 
+tr {
+    cursor: pointer !important;
+}
+
 .bottom-border {
     border-bottom: 1px solid #666;
     display: block;
+}
+
+.MMM-ServiceViewer {
+    cursor: initial;
 }
