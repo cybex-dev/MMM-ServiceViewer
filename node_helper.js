@@ -46,6 +46,19 @@ const updateService = (serviceType) => {
             self.sendSocketNotification("SERVICE_UPDATE", serviceType);
         }
     });
+    bonjour.find({ type: serviceType, protocol: "udp" }, function (service) {
+        // Check if we have a duplicate
+        var matches = cachedServices.filter(value => isServicesEqual(value, service));
+        if(matches.length > 0) {
+            // replace existing service to get the latest
+            cachedServices = cachedServices.filter(service1 => !isServicesEqual(service, service1));
+        }
+        // Add entry
+        cachedServices.push(service);
+        if (matches.length === 0) {
+            self.sendSocketNotification("SERVICE_UPDATE", serviceType);
+        }
+    });
 };
 
 module.exports = NodeHelper.create({
