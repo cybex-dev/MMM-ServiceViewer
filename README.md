@@ -59,6 +59,7 @@ When an host (entry) is clicked, a notification is sent using the [Magic Mirror 
         location: "",
         port: "",
         type: "",
+        host: "",
     } 
 
 The payload descriptions/purpose is as follows
@@ -68,7 +69,8 @@ The payload descriptions/purpose is as follows
 | `protocol`         | The protocol `TCP`, `UDP`, etc of the service.
 | `location`         | The IP address where the service can be found.
 | `port`             | The port where the service can be accessed from.
-| `type`             | Type as defined in Avahi Service Types the first part of the service type e.g. the `_ssh` part of the full service name `_ssh._tcp`. The type name in this case will be `ssh` (without the underscore).  
+| `type`             | Type as defined in Avahi Service Types the first part of the service type e.g. the `_ssh` part of the full service name `_ssh._tcp`. The type name in this case will be `ssh` (without the underscore).
+| `host`             | The host is a DNS name which describes the `device-name.domain` which is used for samba shares.  
 
 *See the [Avahi Documentation](https://linux.die.net/man/5/avahi.service) and the [Arch Wiki](https://wiki.archlinux.org/index.php/Avahi) for information about Avahi operations and naming conventions, and the [IANA register](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml) for service names and their corresponding ports.* 
 

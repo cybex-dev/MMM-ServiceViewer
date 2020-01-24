@@ -139,6 +139,7 @@ Module.register("MMM-ServiceViewer",{
                         location: service.addresses[0],
                         port: service.port,
                         type: service.type,
+                        host: service.host
                     })
                 });
 
