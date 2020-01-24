@@ -9,7 +9,7 @@ const isHttp = (service) => {
 };
 
 const usesMulticast = (service) => {
-    return (service.txt) ? service.txt.uses_multicast === "1" : false;
+    return (service.txt) ? service.txt.use_multicast === "1" : false;
 };
 
 const getMulticastAddress = (service) => {
