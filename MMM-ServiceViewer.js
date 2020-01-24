@@ -1,5 +1,11 @@
 const isHttp = (service) => {
-    return (service.txt) ? service.txt.uri.startsWith("/") : false;
+    if (service.txt) {
+        if(service.txt.uri) {
+            return service.txt.uri.startsWith("/");
+        }
+    }
+
+    return false;
 };
 
 const usesMulticast = (service) => {
