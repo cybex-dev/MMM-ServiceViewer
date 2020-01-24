@@ -1,3 +1,15 @@
+const usesMulticast = (service) => {
+    return (service.txt) ? service.txt.uses_multicast === "1" : false;
+};
+
+const getMulticastAddress = (service) => {
+    return (service.txt) ? service.txt.multicast_address : "";
+};
+
+const validIPv4 = (address) => {
+    return (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(address));
+};
+
 // this needs to be reduced
 const mapToHost = (serviceList) => {
     let output = new Map;
@@ -134,9 +146,20 @@ Module.register("MMM-ServiceViewer",{
 
                 row.addEventListener('click', () => {
                     const service = entry;
+
+                    var ipv4s = service.addresses.filter(validIPv4);
+                    if (ipv4s.length === 0) {
+                        console.log("No valid IPv4 address can be found, this may be a problem");
+                    }
+
+                    var ip = ipv4s.length === 0 ? service.addresses[0] : ipv4s[0];
+                    if(usesMulticast(entry)) {
+                        ip = getMulticastAddress(entry);
+                    }
+
                     self.sendNotification("XDG-OPEN", {
                         protocol: service.protocol,
-                        location: service.addresses[0],
+                        location: ip,
                         port: service.port,
                         type: service.type,
                         host: service.host

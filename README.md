@@ -67,7 +67,7 @@ The payload descriptions/purpose is as follows
 | Option             | Description
 | ------------------ | -----------
 | `protocol`         | The protocol `TCP`, `UDP`, etc of the service.
-| `location`         | The IP address where the service can be found.
+| `location`         | The IP address where the service can be found. (if the option `uses_multicast=1` is found in the `txt-record`s, then the multicast address is used.
 | `port`             | The port where the service can be accessed from.
 | `type`             | Type as defined in Avahi Service Types the first part of the service type e.g. the `_ssh` part of the full service name `_ssh._tcp`. The type name in this case will be `ssh` (without the underscore).
 | `host`             | The host is a DNS name which describes the `device-name.domain` which is used for samba shares.  
