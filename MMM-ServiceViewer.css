@@ -9,6 +9,15 @@ td {
     line-height: 2em;
 }
 
+.MMM-ServiceViewer td {
+    background-color: #000000;
+    border: 0;
+}
+
+.MMM-ServiceViewer td:hover {
+    background-color: #a86d04;
+}
+
 tr {
     cursor: pointer !important;
 }
